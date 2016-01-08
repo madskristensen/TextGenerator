@@ -3,7 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/ojheth5vebhno7we?svg=true)](https://ci.appveyor.com/project/madskristensen/textgenerator)
 
 Download the extension at the
-[VS Gallery](https://visualstudiogallery.msdn.microsoft.com/5741a548-5179-4a77-ad96-fca71535774d)
+[VS Gallery](https://visualstudiogallery.msdn.microsoft.com/4d809607-87dd-445c-8cd4-585da67c6beb)
 or get the
 [nightly build](http://vsixgallery.com/extension/0007e9e3-b11a-4d10-8565-9c6ce2ccc286/)
 
