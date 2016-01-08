@@ -14,11 +14,11 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
 
-        <Label x:Name="lblType" Grid.Column="0" Grid.Row="0"  Content="Type" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <ComboBox x:Name="cbType" Grid.Column="1" Grid.Row="0" Margin="10,20,10,0" VerticalAlignment="Top" Width="auto"/>
+        <Label x:Name="lblLength" Grid.Column="0" Grid.Row="0"  Content="# words" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBox x:Name="txLength" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Height="23" Margin="10,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"/>
 
-        <Label x:Name="lblLength" Grid.Column="0" Grid.Row="1"  Content="# words" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBox x:Name="txLength" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Height="23" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="40"/>
+        <Label x:Name="lblType" Grid.Column="0" Grid.Row="1"  Content="Type" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <ComboBox x:Name="cbType" Grid.Column="1" Grid.Row="1" Margin="10,5,10,0" VerticalAlignment="Top" Width="auto"/>
 
         <Button x:Name="btnOk" Grid.Column="2" Grid.Row="2" Content="Insert" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Top" Width="75" IsDefault="True" Click="btnOk_Click" RenderTransformOrigin="0.495,0.489"/>
     </Grid>
