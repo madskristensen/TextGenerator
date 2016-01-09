@@ -17,8 +17,8 @@ select **Generate text...**
 
 ![Context menu](art/context-menu.png)
 
-That will open this little dialogs that allows you to
-specify which vocabulary and how many words to insert.
+That will open this little dialog which allows you to
+specify a vocabulary and how many words to insert.
 
 ![Dialog](art/dialog.png)
 
