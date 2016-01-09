@@ -15,8 +15,12 @@ namespace MadsKristensen.TextGenerator
             var componentModel = GetComponentModel();
             if (componentModel == null) return null;
             var editorAdapter = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+            var nativeView = GetCurrentNativeTextView();
 
-            return editorAdapter.GetWpfTextView(GetCurrentNativeTextView());
+            if (nativeView != null)
+                return editorAdapter.GetWpfTextView(nativeView);
+
+            return null;
         }
 
         public static IVsTextView GetCurrentNativeTextView()
@@ -24,7 +28,7 @@ namespace MadsKristensen.TextGenerator
             var textManager = (IVsTextManager)ServiceProvider.GlobalProvider.GetService(typeof(SVsTextManager));
 
             IVsTextView activeView = null;
-            ErrorHandler.ThrowOnFailure(textManager.GetActiveView(1, null, out activeView));
+            textManager.GetActiveView(1, null, out activeView);
             return activeView;
         }
 

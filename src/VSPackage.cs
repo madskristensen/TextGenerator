@@ -41,15 +41,14 @@ namespace MadsKristensen.TextGenerator
         {
             var view = ProjectHelpers.GetCurentTextView();
 
-            if (view == null)
-                return;
+            if (view != null)
+            {
+                var dte = (DTE2)GetService(typeof(DTE));
+                string text = GetText(dte);
 
-            var dte = (DTE2)GetService(typeof(DTE));
-
-            string text = GetText(dte);
-
-            if (!string.IsNullOrEmpty(text))
-                InsertText(view, dte, text);
+                if (!string.IsNullOrEmpty(text))
+                    InsertText(view, dte, text);
+            }
         }
 
         private string GetText(DTE2 dte)
