@@ -27,7 +27,7 @@ namespace MadsKristensen.TextGenerator
                 SetLipsumTypes();
                 SetSelection();
 
-                txLength.Text = (length == 0 ? 30 : length).ToString();
+                txLength.Text = (length == 0 ? 20 : length).ToString();
                 txLength.Focus();
                 txLength.SelectAll();
             };
@@ -115,10 +115,20 @@ namespace MadsKristensen.TextGenerator
 
                 Telemetry.TrackEvent(propName);
 
-                Text = string.Join(" ", words);
+                Text = UppercaseFirst(string.Join(" ", words));
 
                 DialogResult = true;
             }
+        }
+
+        static string UppercaseFirst(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+
+            return char.ToUpper(s[0]) + s.Substring(1);
         }
     }
 }

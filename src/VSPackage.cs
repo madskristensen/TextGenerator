@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
+using System.Windows.Interop;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Text.Editor;
 
 namespace MadsKristensen.TextGenerator
 {
@@ -29,13 +31,13 @@ namespace MadsKristensen.TextGenerator
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
             {
-                CommandID menuCommandID = new CommandID(PackageGuids.guidTextGeneratorCmdSet, PackageIds.cmdidMyCommand);
-                MenuCommand menuItem = new MenuCommand(InsertText, menuCommandID);
+                CommandID menuCommandID = new CommandID(PackageGuids.guidTextGeneratorCmdSet, PackageIds.cmdGenerate);
+                MenuCommand menuItem = new MenuCommand(Execute, menuCommandID);
                 mcs.AddCommand(menuItem);
             }
         }
 
-        private void InsertText(object sender, EventArgs e)
+        private void Execute(object sender, EventArgs e)
         {
             var view = ProjectHelpers.GetCurentTextView();
 
@@ -44,15 +46,33 @@ namespace MadsKristensen.TextGenerator
 
             var dte = (DTE2)GetService(typeof(DTE));
 
-            dte.UndoContext.Open("Generate text");
+            string text = GetText(dte);
 
+            if (!string.IsNullOrEmpty(text))
+                InsertText(view, dte, text);
+        }
+
+        private string GetText(DTE2 dte)
+        {
+            GeneratorDialog dialog = new GeneratorDialog(this, 0);
+
+            var hwnd = new IntPtr(dte.MainWindow.HWnd);
+            System.Windows.Window window = (System.Windows.Window)HwndSource.FromHwnd(hwnd).RootVisual;
+            dialog.Owner = window;
+
+            var result = dialog.ShowDialog();
+
+            if (result.HasValue && result.Value)
+                return dialog.Text;
+
+            return null;
+        }
+
+        private static void InsertText(IWpfTextView view, DTE2 dte, string text)
+        {
             try
             {
-                GeneratorDialog dialog = new GeneratorDialog(this, 0);
-                var result = dialog.ShowDialog();
-
-                if (!result.HasValue || !result.Value)
-                    return;
+                dte.UndoContext.Open("Generate text");
 
                 using (var edit = view.TextBuffer.CreateEdit())
                 {
@@ -62,9 +82,13 @@ namespace MadsKristensen.TextGenerator
                         view.Selection.Clear();
                     }
 
-                    edit.Insert(view.Caret.Position.BufferPosition, dialog.Text);
+                    edit.Insert(view.Caret.Position.BufferPosition, text);
                     edit.Apply();
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
             }
             finally
             {

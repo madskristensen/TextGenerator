@@ -25,8 +25,7 @@ namespace MadsKristensen.TextGenerator
     /// </summary>
     internal sealed partial class PackageIds
     {
-        public const int MyMenuGroup = 0x1020;
-        public const int cmdidMyCommand = 0x0100;
+        public const int cmdGenerate = 0x0100;
         public const int htmlClipboard = 0x0064;
         public const int cssClipboard = 0x0064;
         public const int jsonClipboard = 0x0064;

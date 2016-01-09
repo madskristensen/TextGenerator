@@ -5,17 +5,12 @@
     <Extern href="vsshlids.h"/>
 
     <Commands package="guidTextGeneratorPkg">
-        <Groups>
-            <Group guid="guidTextGeneratorCmdSet" id="MyMenuGroup" priority="0x0600">
-                <Parent guid="guidSHLMainMenu" id="IDM_VS_EDITOR_PASTE_MENU"/>
-            </Group>
-        </Groups>
-
         <Buttons>
-            <Button guid="guidTextGeneratorCmdSet" id="cmdidMyCommand" priority="0x0600" type="Button">
+            <Button guid="guidTextGeneratorCmdSet" id="cmdGenerate" priority="0x0600" type="Button">
                 <Parent guid="guidSHLMainMenu" id="IDG_VS_CODEWIN_TEXTEDIT"/>
                 <Icon guid="guidImages" id="abc" />
                 <CommandFlag>TextChanges</CommandFlag>
+                <CommandFlag>DynamicVisibility</CommandFlag>
                 <Strings>
                     <ButtonText>Generate text...</ButtonText>
                 </Strings>
@@ -28,19 +23,27 @@
     </Commands>
 
     <CommandPlacements>
-        <CommandPlacement guid="guidTextGeneratorCmdSet" id="cmdidMyCommand" priority="0x0600">
+        <CommandPlacement guid="guidTextGeneratorCmdSet" id="cmdGenerate" priority="0x0600">
             <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_DELETE"/>
         </CommandPlacement>
-        <CommandPlacement guid="guidTextGeneratorCmdSet" id="cmdidMyCommand" priority="0x0600">
+        <CommandPlacement guid="guidTextGeneratorCmdSet" id="cmdGenerate" priority="0x0600">
             <Parent guid="HtmlCmdSet" id="htmlClipboard"/>
         </CommandPlacement>
-        <CommandPlacement guid="guidTextGeneratorCmdSet" id="cmdidMyCommand" priority="0x0600">
+        <CommandPlacement guid="guidTextGeneratorCmdSet" id="cmdGenerate" priority="0x0600">
             <Parent guid="CssCmdSet" id="cssClipboard"/>
         </CommandPlacement>
-        <CommandPlacement guid="guidTextGeneratorCmdSet" id="cmdidMyCommand" priority="0x0600">
+        <CommandPlacement guid="guidTextGeneratorCmdSet" id="cmdGenerate" priority="0x0600">
             <Parent guid="JsonCmdSet" id="jsonClipboard"/>
         </CommandPlacement>
     </CommandPlacements>
+
+    <VisibilityConstraints>
+        <VisibilityItem guid="guidTextGeneratorCmdSet" id="cmdGenerate" context="UICONTEXT_SolutionExists" />
+    </VisibilityConstraints>
+
+    <KeyBindings>
+        <KeyBinding guid="guidTextGeneratorCmdSet" id="cmdGenerate" mod1="Alt" key1="VK_INSERT" editor="guidVSStd97"/>
+    </KeyBindings>
 
     <Symbols>
         <!-- This is the package guid. -->
@@ -48,8 +51,7 @@
 
         <!-- This is the guid used to group the menu commands together -->
         <GuidSymbol name="guidTextGeneratorCmdSet" value="{ea633062-6817-4827-a113-c839f5d878e7}">
-            <IDSymbol name="MyMenuGroup" value="0x1020" />
-            <IDSymbol name="cmdidMyCommand" value="0x0100" />
+            <IDSymbol name="cmdGenerate" value="0x0100" />
         </GuidSymbol>
 
         <GuidSymbol name="HtmlCmdSet" value="{78F03954-2FB8-4087-8CE7-59D71710B3BB}" >
