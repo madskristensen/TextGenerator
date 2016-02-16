@@ -22,7 +22,7 @@ namespace MadsKristensen.TextGenerator
                 _settings = new ShellSettingsManager(serviceProvider);
                 Icon = BitmapFrame.Create(new Uri("pack://application:,,,/TextGenerator;component/Resources/images.png", UriKind.RelativeOrAbsolute));
 
-                Title = VSPackage.Name;
+                Title = Vsix.Name;
 
                 SetLipsumTypes();
                 SetSelection();
@@ -46,7 +46,7 @@ namespace MadsKristensen.TextGenerator
             try
             {
                 SettingsStore store = _settings.GetReadOnlySettingsStore(SettingsScope.UserSettings);
-                int index = store.GetInt32(VSPackage.Name, "type", 0);
+                int index = store.GetInt32(Vsix.Name, "type", 0);
                 cbType.SelectedIndex = index;
             }
             catch (Exception ex)
@@ -61,10 +61,10 @@ namespace MadsKristensen.TextGenerator
             {
                 WritableSettingsStore wstore = _settings.GetWritableSettingsStore(SettingsScope.UserSettings);
 
-                if (!wstore.CollectionExists(VSPackage.Name))
-                    wstore.CreateCollection(VSPackage.Name);
+                if (!wstore.CollectionExists(Vsix.Name))
+                    wstore.CreateCollection(Vsix.Name);
 
-                wstore.SetInt32(VSPackage.Name, "type", cbType.SelectedIndex);
+                wstore.SetInt32(Vsix.Name, "type", cbType.SelectedIndex);
             }
             catch (Exception ex)
             {

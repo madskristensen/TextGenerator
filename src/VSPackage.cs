@@ -12,21 +12,18 @@ namespace MadsKristensen.TextGenerator
 {
 
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", Version, IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", Vsix.Version, IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
     [Guid(PackageGuids.guidTextGeneratorPkgString)]
     public sealed class VSPackage : Package
     {
-        public const string Version = "1.0";
-        public const string Name = "Text Generator";
-
         protected override void Initialize()
         {
             base.Initialize();
 
-            Telemetry.Initialize(this, Version, "d14d5404-e81e-477d-980e-87fac8281353");
-            Logger.Initialize(this, Name);
+            Telemetry.Initialize(this, Vsix.Version, "d14d5404-e81e-477d-980e-87fac8281353");
+            Logger.Initialize(this, Vsix.Name);
 
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
