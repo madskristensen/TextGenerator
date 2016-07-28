@@ -113,8 +113,6 @@ namespace MadsKristensen.TextGenerator
                 var generator = new LipsumGenerator(vocab, false);
                 string[] words = generator.GenerateWords(length);
 
-                Telemetry.TrackEvent(propName);
-
                 Text = UppercaseFirst(string.Join(" ", words));
 
                 DialogResult = true;

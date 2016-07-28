@@ -22,7 +22,6 @@ namespace MadsKristensen.TextGenerator
         {
             base.Initialize();
 
-            Telemetry.Initialize(this, Vsix.Version, "d14d5404-e81e-477d-980e-87fac8281353");
             Logger.Initialize(this, Vsix.Name);
 
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
