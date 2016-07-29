@@ -5,7 +5,6 @@ using System.Windows.Interop;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Editor;
 
 namespace MadsKristensen.TextGenerator
@@ -14,7 +13,6 @@ namespace MadsKristensen.TextGenerator
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", Vsix.Version, IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
     [Guid(PackageGuids.guidTextGeneratorPkgString)]
     public sealed class VSPackage : Package
     {
