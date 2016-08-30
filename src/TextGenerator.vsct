@@ -9,8 +9,6 @@
             <Button guid="guidTextGeneratorCmdSet" id="cmdGenerate" priority="0x0600" type="Button">
                 <Parent guid="guidSHLMainMenu" id="IDG_VS_CODEWIN_TEXTEDIT"/>
                 <Icon guid="guidImages" id="abc" />
-                <CommandFlag>TextChanges</CommandFlag>
-                <CommandFlag>DynamicVisibility</CommandFlag>
                 <Strings>
                     <ButtonText>Generate text...</ButtonText>
                 </Strings>
@@ -36,10 +34,6 @@
             <Parent guid="JsonCmdSet" id="jsonClipboard"/>
         </CommandPlacement>
     </CommandPlacements>
-
-    <VisibilityConstraints>
-        <VisibilityItem guid="guidTextGeneratorCmdSet" id="cmdGenerate" context="UICONTEXT_SolutionExists" />
-    </VisibilityConstraints>
 
     <KeyBindings>
         <KeyBinding guid="guidTextGeneratorCmdSet" id="cmdGenerate" mod1="Alt" key1="VK_INSERT" editor="guidVSStd97"/>

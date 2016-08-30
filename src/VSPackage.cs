@@ -18,17 +18,12 @@ namespace MadsKristensen.TextGenerator
     {
         protected override void Initialize()
         {
-            base.Initialize();
-
             Logger.Initialize(this, Vsix.Name);
 
-            OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if (null != mcs)
-            {
-                CommandID menuCommandID = new CommandID(PackageGuids.guidTextGeneratorCmdSet, PackageIds.cmdGenerate);
-                MenuCommand menuItem = new MenuCommand(Execute, menuCommandID);
-                mcs.AddCommand(menuItem);
-            }
+            var mcs = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
+            var commandId = new CommandID(PackageGuids.guidTextGeneratorCmdSet, PackageIds.cmdGenerate);
+            var command = new MenuCommand(Execute, commandId);
+            mcs.AddCommand(command);
         }
 
         private void Execute(object sender, EventArgs e)
