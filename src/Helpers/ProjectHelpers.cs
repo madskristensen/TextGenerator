@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio;
+﻿using Microsoft;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
@@ -12,10 +13,10 @@ namespace MadsKristensen.TextGenerator
         ///<summary>Gets the TextView for the active document.</summary>
         public static IWpfTextView GetCurentTextView()
         {
-            var componentModel = GetComponentModel();
+            IComponentModel componentModel = GetComponentModel();
             if (componentModel == null) return null;
-            var editorAdapter = componentModel.GetService<IVsEditorAdaptersFactoryService>();
-            var nativeView = GetCurrentNativeTextView();
+            IVsEditorAdaptersFactoryService editorAdapter = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+            IVsTextView nativeView = GetCurrentNativeTextView();
 
             if (nativeView != null)
                 return editorAdapter.GetWpfTextView(nativeView);
@@ -25,10 +26,12 @@ namespace MadsKristensen.TextGenerator
 
         public static IVsTextView GetCurrentNativeTextView()
         {
-            var textManager = (IVsTextManager)ServiceProvider.GlobalProvider.GetService(typeof(SVsTextManager));
+            ThreadHelper.ThrowIfNotOnUIThread();
 
-            IVsTextView activeView = null;
-            textManager.GetActiveView(1, null, out activeView);
+            var textManager = (IVsTextManager)ServiceProvider.GlobalProvider.GetService(typeof(SVsTextManager));
+            Assumes.Present(textManager);
+
+            textManager.GetActiveView(1, null, out IVsTextView activeView);
             return activeView;
         }
 

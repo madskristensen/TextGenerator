@@ -1,26 +1,32 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Interop;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
+using Task = System.Threading.Tasks.Task;
 
 namespace MadsKristensen.TextGenerator
 {
 
-    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", Vsix.Version, IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PackageGuids.guidTextGeneratorPkgString)]
-    public sealed class VSPackage : Package
+    public sealed class VSPackage : AsyncPackage
     {
-        protected override void Initialize()
+        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            Logger.Initialize(this, Vsix.Name);
+            await JoinableTaskFactory.SwitchToMainThreadAsync();
+            
+            var mcs = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
+            Assumes.Present(mcs);
 
-            var mcs = (OleMenuCommandService)GetService(typeof(IMenuCommandService));
             var commandId = new CommandID(PackageGuids.guidTextGeneratorCmdSet, PackageIds.cmdGenerate);
             var command = new MenuCommand(Execute, commandId);
             mcs.AddCommand(command);
@@ -28,7 +34,7 @@ namespace MadsKristensen.TextGenerator
 
         private void Execute(object sender, EventArgs e)
         {
-            var view = ProjectHelpers.GetCurentTextView();
+            IWpfTextView view = ProjectHelpers.GetCurentTextView();
 
             if (view != null)
             {
@@ -42,13 +48,14 @@ namespace MadsKristensen.TextGenerator
 
         private string GetText(DTE2 dte)
         {
-            GeneratorDialog dialog = new GeneratorDialog(this, 0);
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var dialog = new GeneratorDialog(this, 0);
 
             var hwnd = new IntPtr(dte.MainWindow.HWnd);
-            System.Windows.Window window = (System.Windows.Window)HwndSource.FromHwnd(hwnd).RootVisual;
+            var window = (System.Windows.Window)HwndSource.FromHwnd(hwnd).RootVisual;
             dialog.Owner = window;
 
-            var result = dialog.ShowDialog();
+            bool? result = dialog.ShowDialog();
 
             if (result.HasValue && result.Value)
                 return dialog.Text;
@@ -58,11 +65,13 @@ namespace MadsKristensen.TextGenerator
 
         private static void InsertText(IWpfTextView view, DTE2 dte, string text)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             try
             {
                 dte.UndoContext.Open("Generate text");
 
-                using (var edit = view.TextBuffer.CreateEdit())
+                using (Microsoft.VisualStudio.Text.ITextEdit edit = view.TextBuffer.CreateEdit())
                 {
                     if (!view.Selection.IsEmpty)
                     {
@@ -76,7 +85,7 @@ namespace MadsKristensen.TextGenerator
             }
             catch (Exception ex)
             {
-                Logger.Log(ex);
+                System.Diagnostics.Debug.Write(ex);
             }
             finally
             {

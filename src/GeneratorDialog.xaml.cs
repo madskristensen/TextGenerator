@@ -51,7 +51,7 @@ namespace MadsKristensen.TextGenerator
             }
             catch (Exception ex)
             {
-                Logger.Log(ex);
+                System.Diagnostics.Debug.Write(ex);
             }
         }
 
@@ -68,7 +68,7 @@ namespace MadsKristensen.TextGenerator
             }
             catch (Exception ex)
             {
-                Logger.Log(ex);
+                System.Diagnostics.Debug.Write(ex);
             }
         }
 
@@ -76,7 +76,7 @@ namespace MadsKristensen.TextGenerator
         {
             Type type = typeof(Lipsums);
 
-            foreach (var p in type.GetProperties())
+            foreach (System.Reflection.PropertyInfo p in type.GetProperties())
             {
                 string name = Prettify(p.Name);
                 cbType.Items.Add(name);
@@ -85,7 +85,7 @@ namespace MadsKristensen.TextGenerator
 
         private string Prettify(string text)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (char c in text)
             {
@@ -101,13 +101,12 @@ namespace MadsKristensen.TextGenerator
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
             SaveSelection();
-            int length;
 
-            if (int.TryParse(txLength.Text, out length))
+            if (int.TryParse(txLength.Text, out int length))
             {
                 Type type = typeof(Lipsums);
                 string propName = ((string)cbType.SelectedItem).Replace(" ", string.Empty);
-                var prop = type.GetProperty(propName);
+                System.Reflection.PropertyInfo prop = type.GetProperty(propName);
                 string vocab = (string)prop.GetValue(null, null);
 
                 var generator = new LipsumGenerator(vocab, false);
