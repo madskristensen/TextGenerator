@@ -2,8 +2,7 @@
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Interop;
+using System.Windows;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft;
@@ -23,7 +22,7 @@ namespace MadsKristensen.TextGenerator
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await JoinableTaskFactory.SwitchToMainThreadAsync();
-            
+
             var mcs = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
             Assumes.Present(mcs);
 
@@ -39,26 +38,32 @@ namespace MadsKristensen.TextGenerator
             if (view != null)
             {
                 var dte = (DTE2)GetService(typeof(DTE));
-                string text = GetText(dte);
+                var text = GetText();
 
                 if (!string.IsNullOrEmpty(text))
+                {
                     InsertText(view, dte, text);
+                }
             }
         }
 
-        private string GetText(DTE2 dte)
+        private string GetText()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var dialog = new GeneratorDialog(this, 0);
+            var dialog = new GeneratorDialog(this, 0)
+            {
+                Owner = Application.Current.MainWindow
+            };
 
-            var hwnd = new IntPtr(dte.MainWindow.HWnd);
-            var window = (System.Windows.Window)HwndSource.FromHwnd(hwnd).RootVisual;
-            dialog.Owner = window;
-
-            bool? result = dialog.ShowDialog();
+            var result = dialog.ShowDialog();
 
             if (result.HasValue && result.Value)
-                return dialog.Text;
+            {
+                if (result.HasValue && result.Value)
+                {
+                    return dialog.Text;
+                }
+            }
 
             return null;
         }
